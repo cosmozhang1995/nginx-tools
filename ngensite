@@ -1,0 +1,20 @@
+#!/bin/bash
+
+NGINX_TOOLS_PATH=$(cd "$(dirname $0)"; pwd)
+source "$NGINX_TOOLS_PATH/env.sh"
+
+sitename=$1
+if [ -e "$NGINX_CONFIG_PATH/sites-enabled/$sitename" ]; then
+	echo "WARNING: Site $sitename already enabled."
+	exit 0
+fi
+
+ln -s "$NGINX_CONFIG_PATH/sites-available/$sitename" "$NGINX_CONFIG_PATH/sites-enabled/$sitename"
+retcode=$?
+if [[ $retcode != 0 ]]; then
+        echo "FAILED: $retcode"
+        exit $retcode
+fi
+
+echo echo "Site $sitename enabled."
+
